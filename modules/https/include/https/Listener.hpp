@@ -6,8 +6,10 @@
 #include "Session.hpp"
 #include "Types.hpp"
 
+
 namespace https
 {
+
 
 // Accepts incoming connections and launches the sessions
 class Listener : public std::enable_shared_from_this<Listener>
@@ -25,5 +27,6 @@ private:
 	tcp::acceptor m_acceptor;
 	tcp::socket m_socket;
 };
+
 
 }	// namespace https

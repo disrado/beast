@@ -7,20 +7,23 @@
 #include "https/Listener.hpp"
 #include "https/Types.hpp"
 
+
 namespace https
 {
+
 
 class Server
 {
 public:
-	Server(const Address& address, Port port, int threadNum);
+	Server(const Host& host, Port port, int threadNum);
 
 	int Run();
 
 private:
-	Address m_address;
+	Host m_host;
 	Port m_port;
 	int m_threadsNum;
 };
+
 
 }	// namespace https

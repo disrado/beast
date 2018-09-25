@@ -7,11 +7,12 @@
 #include <iostream>
 #include <memory>
 
-#include "RequestHandler.hpp"
-#include "Types.hpp"
+#include "https/Types.hpp"
+
 
 namespace https
 {
+
 
 class Session : public std::enable_shared_from_this<Session>
 {
@@ -35,5 +36,6 @@ private:
 	Request m_request;
 	std::shared_ptr<void> m_response;
 };
+
 
 }	// namespace https

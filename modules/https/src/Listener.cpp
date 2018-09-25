@@ -2,8 +2,10 @@
 
 #include <boost/system/system_error.hpp>
 
+
 namespace
 {
+
 
 void Fail(boost::system::error_code ec, char const* what)
 {
@@ -17,8 +19,10 @@ void Fail(char const* what)
 
 }
 
+
 namespace https
 {
+
 
 Listener::Listener(boost::asio::io_context& ioc, tcp::endpoint endpoint)
 	: m_acceptor(ioc)
@@ -31,10 +35,11 @@ Listener::Listener(boost::asio::io_context& ioc, tcp::endpoint endpoint)
 		m_acceptor.bind(endpoint);
 		m_acceptor.listen(boost::asio::socket_base::max_listen_connections);
 	}
-	catch(const boost::system::system_error& ex) {
+	catch (const boost::system::system_error& ex) {
 		Fail(ex.what());
 	}
 }
+
 
 // Start accepting incoming connections
 void Listener::Run()
@@ -46,12 +51,14 @@ void Listener::Run()
 	DoAccept();
 }
 
+
 void Listener::DoAccept()
 {
 	m_acceptor.async_accept(m_socket, [self = shared_from_this()] (boost::system::error_code ec) {
 		self->OnAccept(ec);
 	});
 }
+
 
 void Listener::OnAccept(boost::system::error_code ec)
 {
@@ -64,5 +71,6 @@ void Listener::OnAccept(boost::system::error_code ec)
 	// Accept another connection
 	DoAccept();
 }
+
 
 }	// namespace https

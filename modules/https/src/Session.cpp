@@ -1,25 +1,32 @@
 #include "https/Session.hpp"
+#include "https/Router.hpp"
 
 #include <boost/asio/bind_executor.hpp>
 
+
 namespace
 {
+
 
 void fail(boost::system::error_code ec, char const* what)
 {
 	std::cerr << what << ": " << ec.message() << "\n";
 }
 
-}
+
+}	// local namespace
+
 
 namespace https
 {
 
+
 Session::Session(tcp::socket socket)
-	: m_socket(std::move(socket))
-	, m_strand(m_socket.get_executor())
+	: m_socket{ std::move(socket) }
+	, m_strand{ m_socket.get_executor() }
 {
 }
+
 
 // Start the asynchronous operation
 void Session::Run()
@@ -29,11 +36,14 @@ void Session::Run()
 	m_request = {};
 
 	// Read a request
-	http::async_read(m_socket, m_buffer, m_request, boost::asio::bind_executor(
-		m_strand,
-		std::bind(&Session::OnRead, shared_from_this(), std::placeholders::_1, std::placeholders::_2))
+	http::async_read(m_socket, m_buffer, m_request,
+		boost::asio::bind_executor(m_strand,
+		[self = shared_from_this()] (const auto errorCode, const auto bt) {
+			self->OnRead(errorCode, bt);
+		})
 	);
 }
+
 
 void Session::OnRead(boost::system::error_code ec, std::size_t bytes_transferred)
 {
@@ -48,21 +58,21 @@ void Session::OnRead(boost::system::error_code ec, std::size_t bytes_transferred
 		return fail(ec, "read");
 	}
 
-	auto responce{ std::make_shared<Response>(RequestHandler{}.HandleRquest(std::move(m_request))) };
+	auto response{ Router::Instance().GerHandler(
+		m_request.target().to_string())->Handle(std::move(m_request))
+	};
 
-	m_response = responce;
+	m_response = response;
 
-	http::async_write(
-		m_socket,
-		*responce,
-		boost::asio::bind_executor(
-			m_strand,
-			[self = shared_from_this(), close = responce->need_eof()] (const auto errorCode, const auto bt) {
+	http::async_write(m_socket, *response,
+		boost::asio::bind_executor(m_strand,
+			[self = shared_from_this(), close = response->need_eof()] (const auto errorCode, const auto bt) {
 				self->OnWrite(errorCode, bt, close);
 			}
 		)
 	);
 }
+
 
 void Session::OnWrite(boost::system::error_code ec, std::size_t bytes_transferred, bool close)
 {
@@ -84,6 +94,7 @@ void Session::OnWrite(boost::system::error_code ec, std::size_t bytes_transferre
 	// Read another request
 	Run();
 }
+
 
 void Session::DoClose()
 {
