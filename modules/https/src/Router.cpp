@@ -8,15 +8,6 @@ namespace https
 {
 
 
-Router::Router()
-{
-	m_routes = {
-		{ "/", [] { return std::make_shared<Root>(); } },
-		{ "/doodoo", [] { return std::make_shared<Root>(); } }
-	}; 
-}
-
-
 Router& Router::Instance()
 {
 	static Router instance;
@@ -24,17 +15,18 @@ Router& Router::Instance()
 }
 
 
-//TODO: replace parameter type by string_view(need to update complier)
-std::shared_ptr<BaseRequestHandler> Router::GerHandler(std::string route)
+std::unique_ptr<BaseRequestHandler> Router::GerHandler(std::string_view route)
 {
-	try {
-		{ std::lock_guard<std::mutex> lGuard(m_mapMtx);
-			return m_routes.at(route)();
-		}
-	} catch (const std::out_of_range& exception) {
-		return std::make_shared<Unknown>();
+	if (route == "/")
+	{
+		return std::make_unique<Root>();
 	}
-	
+	else if (route == "/another")
+	{
+		return std::make_unique<Another>();
+	}
+
+	return std::make_unique<Unknown>();
 }
 
 
