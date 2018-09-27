@@ -15,7 +15,7 @@ namespace https
 class Server
 {
 public:
-	Server(const Host& host, Port port, int threadNum);
+	Server(const std::string& host, Port port, int threadsNum);
 
 	int Run();
 
