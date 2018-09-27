@@ -1,5 +1,7 @@
 #pragma once
 
+#include <logger/Logger.hpp>
+
 #include <boost/exception/all.hpp>
 
 #include <string_view>
@@ -16,7 +18,6 @@ void ThrowError(const std::string& message)
 template<typename exceptionType>
 void LogAndThrow(const std::string& message)
 {
-	//TODO: Need to add logger!
-	std::cout << message << std::endl;
+	logger::LOG(logger::Severity::error) << message;
 	ThrowError<exceptionType>(message);
 }

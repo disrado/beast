@@ -2,6 +2,8 @@
 
 #include <boost/system/system_error.hpp>
 
+#include <logger/Logger.hpp>
+
 
 namespace
 {

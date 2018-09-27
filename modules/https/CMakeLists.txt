@@ -17,10 +17,12 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC
         ${CONAN_LIBS}
         utils
+        logger
 )
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         include
+        extern/logger/include
         ${CONAN_LIBS}
 )

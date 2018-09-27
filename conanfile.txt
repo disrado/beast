@@ -3,6 +3,7 @@ boost/1.68.0@conan/stable
 OpenSSL/1.1.0g@conan/stable
 jsonformoderncpp/[>=3.1.2]@vthiery/stable
 gtest/1.8.0@bincrafters/stable
+fmt/5.2.0@bincrafters/stable
 
 [options]
 boost:shared=False

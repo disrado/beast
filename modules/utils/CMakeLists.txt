@@ -15,11 +15,13 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
+        logger
         ${CONAN_LIBS}
 )
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         include
+        extern/include/logger
         ${CONAN_LIBS}
 )
