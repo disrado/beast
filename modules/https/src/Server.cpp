@@ -7,13 +7,16 @@
 
 namespace https
 {
-	
-Server::Server(const Address& address, Port port, int threadNum)
-    : m_address{ address }
+
+
+Server::Server(const std::string& host, Port port, int threadsNum)
+    : m_host{ boost::asio::ip::make_address(host) }
     , m_port{ port }
-    , m_threadsNum{ threadNum }
-{}
-	
+    , m_threadsNum{ threadsNum }
+{
+}
+
+
 int Server::Run()
 {
 	boost::asio::io_context ioc{ m_threadsNum };

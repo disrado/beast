@@ -10,23 +10,23 @@ add_executable(${PROJECT_NAME}
 	${${PROJECT_NAME}_SOURCES}
 )
 
-target_compile_options(${PROJECT_NAME}
-	PRIVATE
-		$<$<CXX_COMPILER_ID:MSVC>:
-			/MP /W3 /Zf
-			$<$<CONFIG:Debug>:/MTd>
-			$<$<CONFIG:Release>:/MT>>
-		$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:
-			-Wall -Wextra -Werror -Wpedantic -pedantic-errors -pipe>
-)
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
 target_link_libraries(${PROJECT_NAME}
 	${CONAN_LIBS}
 	https
+	utils
+	stdc++fs
 )
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         include
         ${CONAN_LIBS}
+)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory
+	${CMAKE_SOURCE_DIR}/modules/app/assets
+	${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/
+	COMMENT "Copying app configuration emails..."
 )
