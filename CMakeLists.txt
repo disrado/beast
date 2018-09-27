@@ -13,6 +13,7 @@ conan_basic_setup()
 add_subdirectory(modules/app)
 add_subdirectory(modules/https)
 add_subdirectory(modules/utils)
+add_subdirectory(extern/logger)
 
 if (ENABLE_TESTING)
 	enable_testing()
