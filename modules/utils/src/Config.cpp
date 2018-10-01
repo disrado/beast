@@ -1,4 +1,4 @@
-#include "utils/AppConfig.hpp"
+#include "utils/Config.hpp"
 #include "utils/Exception.hpp"
 
 #include <fstream>
@@ -20,7 +20,7 @@ void AppConfig::ReadConfig(const std::filesystem::path& path)
 	std::ifstream ifs{ path };
 
 	if (!ifs.is_open()) {
-		LogAndThrow<std::logic_error>(path.string());
+		Throw<std::logic_error>(path.string());
 	}
 
 	nl::json jsonCfg;
@@ -28,6 +28,7 @@ void AppConfig::ReadConfig(const std::filesystem::path& path)
 	ifs >> jsonCfg;
 
 	server = jsonCfg["server"].get<ServerConfig>();
+	logger = jsonCfg["logger"].get<LoggerConfig>();
 }
 
 
@@ -45,6 +46,26 @@ void to_json(nl::json& j, const ServerConfig& c)
 		{ "host", c.host },
 		{ "port", c.port },
 		{ "threads", c.threads }
+	};
+}
+
+void from_json(const nl::json& j, LoggerConfig& c)
+{
+	c.enableDebug = j.at("enableDebug").get<bool>();
+	c.enableError = j.at("enableError").get<bool>();
+	c.enableInfo = j.at("enableInfo").get<bool>();
+	c.enableWarning = j.at("enableWarning").get<bool>();
+	c.logFilePath = j.at("logFilePath").get<std::string>();
+}
+
+void to_json(nl::json& j, const LoggerConfig& c)
+{
+	j = nl::json{
+		{ "enableDebug", c.enableDebug },
+		{ "enableError", c.enableError },
+		{ "enableInfo", c.enableInfo },
+		{ "enableWarning", c.enableWarning },
+		{ "logFilePath", c.logFilePath }
 	};
 }
 

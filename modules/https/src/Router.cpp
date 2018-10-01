@@ -21,7 +21,10 @@ Router& Router::Instance()
 
 std::unique_ptr<BaseRequestHandler> Router::GerHandler(std::string_view route)
 {
-	logger::SLOG(logger::Severity::info, "Routing")
+	lg::SLOG(lg::Severity::info, "Routing")
+		<< fmt::format("Processed route: \"{}\"", route); 
+
+	lg::SLOGGF(lg::Severity::info, "Routing")
 		<< fmt::format("Processed route: \"{}\"", route); 
 
 	if (route == "/")

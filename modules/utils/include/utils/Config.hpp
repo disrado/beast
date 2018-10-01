@@ -21,6 +21,16 @@ struct ServerConfig
 };
 
 
+struct LoggerConfig
+{
+	bool enableDebug;
+	bool enableError;
+	bool enableInfo;
+	bool enableWarning;
+	std::filesystem::path logFilePath;
+};
+
+
 class AppConfig
 {
 public:
@@ -30,11 +40,14 @@ public:
 
 public:
 	ServerConfig server;
+	LoggerConfig logger;
 };
 
 
 void from_json(const nl::json& j, ServerConfig& c);
 void to_json(nl::json& j, const ServerConfig& c);
 
+void from_json(const nl::json& j, LoggerConfig& c);
+void to_json(nl::json& j, const LoggerConfig& c);
 
 }	// namespace utils

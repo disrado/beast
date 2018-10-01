@@ -3,5 +3,12 @@
         "host": "127.0.0.1",
         "port": 8080,
         "threads": 4
+    },
+    "logger": {
+        "enableDebug": true,
+        "enableError": true,
+        "enableInfo": true,
+        "enableWarning": true,
+        "logFilePath": "log.txt"
     }
 }

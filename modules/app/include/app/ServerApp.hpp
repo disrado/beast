@@ -13,8 +13,11 @@ class ServerApp
 {
 public:
 	ServerApp();
-
+	
 	int Run();
+
+private:
+	void InitLogger();
 
 private:
 	const std::filesystem::path m_configPath;
