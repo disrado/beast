@@ -1,5 +1,5 @@
-#include "https/Server.hpp"
-#include "https/Listener.hpp"
+#include "server/Server.hpp"
+#include "server/Listener.hpp"
 
 #include <boost/asio/io_service.hpp>
 
@@ -8,7 +8,7 @@
 #include <thread>
 
 
-namespace https
+namespace bs
 {
 
 
@@ -25,7 +25,7 @@ int Server::Run()
 	boost::asio::io_service ioc{ m_threadsNum };
 
 	// Create and launch a listening port
-	std::make_shared<https::Listener>(ioc, https::tcp::endpoint{ m_host, m_port })->Run();
+	std::make_shared<bs::Listener>(ioc, bs::tcp::endpoint{ m_host, m_port })->Run();
 
 	// Run the I/O service on the requested number of threads
 	std::vector<std::thread> threads;
@@ -41,4 +41,4 @@ int Server::Run()
 }
 
 
-}	// namespace https
+}	// namespace bs

@@ -1,4 +1,4 @@
-#include "https/handlers/Unknown.hpp"
+#include "server/handlers/Unknown.hpp"
 
 #include <boost/beast/http.hpp>
 
@@ -10,13 +10,13 @@ namespace {
 }
 
 
-namespace https
+namespace bs
 {
 
 
-ResponseShPtr Unknown::Handle(Request&& request)
+ResponseShPtr<> Unknown::Handle(Request<>&& request)
 {
-	auto res{ std::make_shared<Response>(http::status::bad_request, request.version()) };
+	auto res{ std::make_shared<Response<>>(http::status::bad_request, request.version()) };
 	res->set(http::field::server, "Beast");
 	res->body() = "Unknown route";
 	res->prepare_payload();
@@ -25,4 +25,4 @@ ResponseShPtr Unknown::Handle(Request&& request)
 }
 
 
-}	// namespace https
+}	// namespace bs

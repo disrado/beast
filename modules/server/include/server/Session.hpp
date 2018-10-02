@@ -7,10 +7,10 @@
 #include <iostream>
 #include <memory>
 
-#include "https/Types.hpp"
+#include "server/Types.hpp"
 
 
-namespace https
+namespace bs
 {
 
 
@@ -33,9 +33,9 @@ private:
 	tcp::socket m_socket;
 	boost::asio::strand<boost::asio::io_context::executor_type> m_strand;
 	boost::beast::flat_buffer m_buffer;
-	Request m_request;
+	Request<> m_request;
 	std::shared_ptr<void> m_response;
 };
 
 
-}	// namespace https
+}	// namespace bs

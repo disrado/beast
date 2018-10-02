@@ -1,5 +1,9 @@
-#include "https/Router.hpp"
-#include "https/handlers/All.hpp"
+#include "server/Router.hpp"
+#include "server/handlers/All.hpp"
+
+#include <logger/Logger.hpp>
+
+#include <fmt/format.h>
 
 #include <logger/Logger.hpp>
 
@@ -8,7 +12,7 @@
 #include <boost/beast/core.hpp>
 
 
-namespace https
+namespace bs
 {
 
 
@@ -21,7 +25,10 @@ Router& Router::Instance()
 
 std::unique_ptr<BaseRequestHandler> Router::GerHandler(std::string_view route)
 {
-	logger::SLOG(logger::Severity::info, "Routing")
+	lg::SLOG(lg::Severity::info, "Routing")
+		<< fmt::format("Processed route: \"{}\"", route); 
+
+	lg::SLOGGF(lg::Severity::info, "Routing")
 		<< fmt::format("Processed route: \"{}\"", route); 
 
 	if (route == "/")
@@ -37,4 +44,4 @@ std::unique_ptr<BaseRequestHandler> Router::GerHandler(std::string_view route)
 }
 
 
-}	// namespace https
+}	// namespace bs

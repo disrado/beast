@@ -1,23 +1,14 @@
-#include "https/Session.hpp"
-#include "https/Router.hpp"
+#include "server/Session.hpp"
+#include "server/Router.hpp"
+
+#include <utils/Exception.hpp>
+
+#include <logger/Logger.hpp>
 
 #include <boost/asio/bind_executor.hpp>
 
 
-namespace
-{
-
-
-void fail(boost::system::error_code ec, char const* what)
-{
-	std::cerr << what << ": " << ec.message() << "\n";
-}
-
-
-}	// local namespace
-
-
-namespace https
+namespace bs
 {
 
 
@@ -47,7 +38,7 @@ void Session::Run()
 
 void Session::OnRead(boost::system::error_code ec, std::size_t bytes_transferred)
 {
-	boost::ignore_unused(bytes_transferred);
+	lg::SLOG(lg::Severity::info, "Data transfering") << bytes_transferred << " bytes read";
 
 	// This means they closed the connection
 	if (ec == http::error::end_of_stream) {
@@ -55,7 +46,8 @@ void Session::OnRead(boost::system::error_code ec, std::size_t bytes_transferred
 	}
 
 	if (ec) {
-		return fail(ec, "read");
+		lg::SLOG(lg::Severity::error, "Read") << ec.message();
+		utils::Throw<std::logic_error>(ec.message());
 	}
 
 	auto response{ Router::Instance().GerHandler(
@@ -66,8 +58,8 @@ void Session::OnRead(boost::system::error_code ec, std::size_t bytes_transferred
 
 	http::async_write(m_socket, *response,
 		boost::asio::bind_executor(m_strand,
-			[self = shared_from_this(), close = response->need_eof()] (const auto errorCode, const auto bt) {
-				self->OnWrite(errorCode, bt, close);
+			[s = shared_from_this(), close = response->need_eof()] (const auto ec, const auto bt) {
+				s->OnWrite(ec, bt, close);
 			}
 		)
 	);
@@ -76,11 +68,13 @@ void Session::OnRead(boost::system::error_code ec, std::size_t bytes_transferred
 
 void Session::OnWrite(boost::system::error_code ec, std::size_t bytes_transferred, bool close)
 {
-	boost::ignore_unused(bytes_transferred);
-
-	if (ec) {
-		return fail(ec, "write");
+	if (ec)
+	{
+		lg::SLOG(lg::Severity::error, "Write") << ec.message();
+		utils::Throw<std::logic_error>(ec.message());
 	}
+
+	lg::SLOG(lg::Severity::info, "Data transfering") << bytes_transferred << " bytes written";
 
 	// This means we should close the connection, usually because
 	// the response indicated the "Connection: close" semantic.
@@ -102,8 +96,10 @@ void Session::DoClose()
 	boost::system::error_code ec;
 	m_socket.shutdown(tcp::socket::shutdown_send, ec);
 
+	lg::LOG(lg::Severity::info) << "Connection closed";
+
 	// At this point the connection is closed gracefully
 }
 
 
-}	// namespace https
+}	// namespace bs

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(https LANGUAGES CXX)
+project(server LANGUAGES CXX)
 
 file(GLOB_RECURSE ${PROJECT_NAME}_SOURCES 
     "src/*.cpp"

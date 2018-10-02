@@ -1,28 +1,11 @@
-#include "https/Listener.hpp"
+#include "server/Listener.hpp"
 
 #include <boost/system/system_error.hpp>
 
 #include <logger/Logger.hpp>
 
 
-namespace
-{
-
-
-void Fail(boost::system::error_code ec, char const* what)
-{
-	std::cerr << what << ": " << ec.message() << "\n";
-}
-
-void Fail(char const* what)
-{
-	std::cerr << what << std::endl;
-}
-
-}
-
-
-namespace https
+namespace bs
 {
 
 
@@ -38,7 +21,7 @@ Listener::Listener(boost::asio::io_context& ioc, tcp::endpoint endpoint)
 		m_acceptor.listen(boost::asio::socket_base::max_listen_connections);
 	}
 	catch (const boost::system::system_error& ex) {
-		Fail(ex.what());
+		lg::LOG(lg::Severity::error) << ex.what();
 	}
 }
 
@@ -64,8 +47,10 @@ void Listener::DoAccept()
 
 void Listener::OnAccept(boost::system::error_code ec)
 {
+	lg::LOG(lg::Severity::info) << "New connection established";
+
 	if (ec) {
-		Fail(ec, "accept");
+		lg::SLOG(lg::Severity::error, "Accept") << ec.message();
 	} else {
 		std::make_shared<Session>(std::move(m_socket))->Run();
 	}
@@ -75,4 +60,4 @@ void Listener::OnAccept(boost::system::error_code ec)
 }
 
 
-}	// namespace https
+}	// namespace bs
