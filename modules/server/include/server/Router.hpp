@@ -1,7 +1,7 @@
 #pragma once
 
-#include "https/Types.hpp"
-#include "https/handlers/BaseRequestHandler.hpp"
+#include "server/Types.hpp"
+#include "server/handlers/BaseRequestHandler.hpp"
 
 #include <functional>
 #include <memory>
@@ -10,7 +10,7 @@
 #include <unordered_map>
 
 
-namespace https
+namespace bs
 {
 
 
@@ -23,4 +23,4 @@ public:
 };
 
 
-}	// namespace https
+}	// namespace bs

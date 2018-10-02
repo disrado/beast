@@ -25,7 +25,7 @@ ServerApp::ServerApp()
 
 void ServerApp::InitLogger()
 {
-	unsigned short severities{ 0 };
+	uint8_t severities{ 0 };
 
 	if (utils::AppConfig::Instance().logger.enableDebug) {
 		severities |= lg::Severity::debug;
@@ -52,7 +52,7 @@ void ServerApp::InitLogger()
 
 int ServerApp::Run()
 {
-	return https::Server{
+	return bs::Server{
 		utils::AppConfig::Instance().server.host,
 		utils::AppConfig::Instance().server.port,
 		utils::AppConfig::Instance().server.threads

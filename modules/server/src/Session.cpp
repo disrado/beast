@@ -1,5 +1,5 @@
-#include "https/Session.hpp"
-#include "https/Router.hpp"
+#include "server/Session.hpp"
+#include "server/Router.hpp"
 
 #include <utils/Exception.hpp>
 
@@ -8,7 +8,7 @@
 #include <boost/asio/bind_executor.hpp>
 
 
-namespace https
+namespace bs
 {
 
 
@@ -96,8 +96,10 @@ void Session::DoClose()
 	boost::system::error_code ec;
 	m_socket.shutdown(tcp::socket::shutdown_send, ec);
 
+	lg::LOG(lg::Severity::info) << "Connection closed";
+
 	// At this point the connection is closed gracefully
 }
 
 
-}	// namespace https
+}	// namespace bs

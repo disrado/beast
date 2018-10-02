@@ -7,7 +7,7 @@
 #include "Types.hpp"
 
 
-namespace https
+namespace bs
 {
 
 
@@ -29,4 +29,4 @@ private:
 };
 
 
-}	// namespace https
+}	// namespace bs

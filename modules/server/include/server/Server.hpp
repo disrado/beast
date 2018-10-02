@@ -4,11 +4,11 @@
 #include <vector>
 #include <thread>
 
-#include "https/Listener.hpp"
-#include "https/Types.hpp"
+#include "server/Listener.hpp"
+#include "server/Types.hpp"
 
 
-namespace https
+namespace bs
 {
 
 
@@ -26,4 +26,4 @@ private:
 };
 
 
-}	// namespace https
+}	// namespace bs

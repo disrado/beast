@@ -11,7 +11,7 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
 add_subdirectory(modules/app)
-add_subdirectory(modules/https)
+add_subdirectory(modules/server)
 add_subdirectory(modules/utils)
 add_subdirectory(extern/logger)
 

@@ -1,11 +1,11 @@
-#include "https/Listener.hpp"
+#include "server/Listener.hpp"
 
 #include <boost/system/system_error.hpp>
 
 #include <logger/Logger.hpp>
 
 
-namespace https
+namespace bs
 {
 
 
@@ -47,6 +47,8 @@ void Listener::DoAccept()
 
 void Listener::OnAccept(boost::system::error_code ec)
 {
+	lg::LOG(lg::Severity::info) << "New connection established";
+
 	if (ec) {
 		lg::SLOG(lg::Severity::error, "Accept") << ec.message();
 	} else {
@@ -58,4 +60,4 @@ void Listener::OnAccept(boost::system::error_code ec)
 }
 
 
-}	// namespace https
+}	// namespace bs
